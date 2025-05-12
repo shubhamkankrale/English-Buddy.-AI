@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Buddy.AI</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+   
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #0a0f2a;
+        color: #f0f0f0;
+        overflow-x: hidden;
+    }
+
+    /* Logo styling */
+    .logo-container {
+        position: fixed;
+        top: 20px;
+        left: 25px;
+        z-index: 1000;
+    }
+
+    .logo-image {
+        height: 100px;
+        width: auto;        
+        
+        border-radius: 20px;
+        box-shadow: 0 5px 15px rgba(0, 182, 212, 0.4);
+        transition: all 0.3s;
+    }
+
+    .logo-image:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0, 182, 212, 0.6);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 100px auto 50px;
+        padding: 20px;
+        position: relative;
+    }
+
+    .hero {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 50px;
+        position: relative;
+    }
+
+    .hero-content {
+        width: 50%;
+        z-index: 10;
+    }
+
+    h1 {
+        font-size: 2.8em;
+        margin-bottom: 10px;
+        color: white;
+        letter-spacing: 2px;
+    }
+
+    h1 span {
+        display: block;
+        font-size: 0.6em;
+        font-weight: 300;
+        letter-spacing: 2px;
+        color: #adb5bd;
+    }
+
+    .hero-text {
+        margin-bottom: 30px;
+        font-weight: 300;
+        color: #adb5bd;
+        line-height: 1.6;
+        max-width: 480px;
+    }
+
+    .cta-button {
+        background: linear-gradient(90deg, #00b6d4, #0088ff);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        font-weight: 600;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 15px rgba(0, 182, 212, 0.4);
+        margin-bottom: 40px;
+    }
+
+    .cta-button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 182, 212, 0.6);
+    }
+
+    .ai-globe-container {
+        width: 50%;
+        height: 500px;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ai-globe {
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #00b6d4, transparent 60%);
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 0 60px rgba(0, 182, 212, 0.6);
+        animation: pulse 4s infinite alternate, rotate 20s linear infinite;
+    }
+
+    .globe-inner {
+        width: 280px;
+        height: 280px;
+        border-radius: 50%;
+        border: 1px solid rgba(0, 182, 212, 0.4);
+        position: absolute;
+    }
+
+    .globe-detail {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: transparent;
+        border-top: 1px solid rgba(0, 182, 212, 0.3);
+        border-left: 1px solid rgba(0, 182, 212, 0.3);
+        transform: rotate(45deg);
+    }
+
+    .node {
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        background-color: #00f7ff;
+        border-radius: 50%;
+        box-shadow: 0 0 8px #00f7ff;
+        animation: nodeGlow 3s infinite alternate;
+    }
+
+    .circuit-line {
+        position: absolute;
+        background: linear-gradient(90deg, transparent, #00f7ff, transparent);
+        height: 1px;
+        transform-origin: left center;
+        animation: lineGlow 2s infinite alternate;
+    }
+
+    /* Circuit board background pattern */
+    .circuit-pattern {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-image: 
+            radial-gradient(rgba(0, 182, 212, 0.1) 2px, transparent 2px),
+            linear-gradient(90deg, rgba(0, 182, 212, 0.1) 1px, transparent 1px),
+            linear-gradient(rgba(0, 182, 212, 0.1) 1px, transparent 1px);
+        background-size: 50px 50px, 50px 50px, 50px 50px;
+        opacity: 0.4;
+        pointer-events: none;
+        z-index: -1;
+    }
+
+    .floating-particle {
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        background-color: rgba(0, 182, 212, 0.7);
+        border-radius: 50%;
+        box-shadow: 0 0 5px #00f7ff;
+        animation: float 5s infinite linear;
+        opacity: 0.7;
+    }
+
+    .social-icons {
+        display: flex;
+        gap: 15px;
+    }
+
+    .social-icons a {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all 0.3s;
+    }
+
+    .social-icons a:hover {
+        background: rgba(0, 182, 212, 0.7);
+        transform: translateY(-3px);
+    }
+
+    .social-icons i {
+        color: #ffffff;
+        font-size: 16px;
+    }
+
+    /* Main app content */
+    .app-content {
+        background-color: rgba(16, 24, 48, 0.7);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        margin-top: 70px;
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(0, 182, 212, 0.2);
+        z-index: 10;
+    }
+
+    .app-header {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .app-header h2 {
+        font-size: 2.4em;
+        color: #00f7ff;
+        margin-bottom: 10px;
+        letter-spacing: 1.5px;
+    }
+
+    .app-header p {
+        color: #adb5bd;
+        max-width: 600px;
+        margin: 0 auto;
+        font-weight: 300;
+    }
+
+    /* Level Selection */
+    .level-selection {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 35px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .level-btn {
+        flex: 1;
+        min-width: 160px;
+        padding: 14px 25px;
+        border: none;
+        border-radius: 30px;
+        background: rgba(16, 24, 48, 0.9);
+        border: 1px solid rgba(0, 182, 212, 0.5);
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .level-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(0, 182, 212, 0.3), transparent);
+        transition: 0.5s;
+    }
+
+    .level-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 182, 212, 0.3);
+        border-color: #00f7ff;
+    }
+
+    .level-btn:hover::before {
+        left: 100%;
+    }
+
+    /* Chatbox */
+    .chat-container {
+        height: 420px;
+        overflow-y: auto;
+        border: 1px solid rgba(0, 182, 212, 0.3);
+        border-radius: 15px;
+        padding: 20px;
+        margin-bottom: 25px;
+        background-color: rgba(16, 24, 48, 0.5);
+        display: none;
+        animation: fadeInUp 0.7s ease;
+        position: relative;
+    }
+
+    .chat-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(0, 182, 212, 0.05) 0%, transparent 100%);
+        pointer-events: none;
+        border-radius: 15px;
+    }
+
+    /* Scrollbar */
+    .chat-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    .chat-container::-webkit-scrollbar-thumb {
+        background-color: #00d4ff;
+        border-radius: 3px;
+    }
+
+    /* Messages */
+    .message {
+        margin-bottom: 18px;
+        padding: 14px 20px;
+        border-radius: 25px;
+        max-width: 80%;
+        font-size: 15px;
+        line-height: 1.6;
+        animation: fadeIn 0.5s ease-in-out;
+        position: relative;
+        z-index: 1;
+    }
+
+    .user-message {
+        background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 182, 212, 0.1));
+        margin-left: auto;
+        border-bottom-right-radius: 8px;
+        color: #ffffff;
+        border: 1px solid rgba(0, 182, 212, 0.3);
+    }
+
+    .bot-message {
+        background: rgba(255, 255, 255, 0.05);
+        margin-right: auto;
+        border-bottom-left-radius: 8px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Controls */
+    .controls {
+        display: none;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 25px;
+    }
+
+    .record-btn, .end-btn {
+        padding: 14px 28px;
+        border: none;
+        border-radius: 50px;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .record-btn {
+        background: linear-gradient(to right, #007bff, #00d4ff);
+        color: white;
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .record-btn i {
+        font-size: 18px;
+    }
+
+    .record-btn.recording {
+        animation: pulse 1.2s infinite;
+        background: linear-gradient(to right, #ff3855, #ff8f70);
+    }
+
+    .record-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: 0.5s;
+    }
+
+    .record-btn:hover::before {
+        left: 100%;
+    }
+
+    .record-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.5);
+    }
+
+    .end-btn {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .end-btn:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-3px);
+    }
+
+    .status {
+        font-style: italic;
+        text-align: center;
+        margin: 10px 0;
+        color: #adb5bd;
+        font-size: 14px;
+    }
+
+    /* Report Section */
+    .report-container {
+        display: none;
+        background: rgba(16, 24, 48, 0.7);
+        border: 1px solid rgba(0, 182, 212, 0.3);
+        border-radius: 15px;
+        padding: 30px;
+        margin-top: 30px;
+        animation: fadeInUp 1s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .report-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #00b6d4, #0088ff);
+    }
+
+    .report-container h2 {
+        color: #00f7ff;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 24px;
+        letter-spacing: 1px;
+    }
+
+    .metric {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+        padding: 10px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .metric-name {
+        font-weight: 500;
+        color: #f0f0f0;
+    }
+
+    .metric-value {
+        color: #00f7ff;
+        font-weight: 600;
+    }
+
+    .suggestions {
+        background: rgba(0, 182, 212, 0.1);
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 25px;
+        line-height: 1.6;
+        border: 1px solid rgba(0, 182, 212, 0.2);
+    }
+
+    .suggestions h3 {
+        color: #00f7ff;
+        margin-top: 0;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+
+    /* Restart Button */
+    .restart-btn {
+        display: block;
+        margin: 30px auto 0;
+        padding: 14px 32px;
+        border: none;
+        border-radius: 30px;
+        background: linear-gradient(to right, #007bff, #00d4ff);
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+    }
+
+    .restart-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.4);
+    }
+
+    /* Loading Spinner */
+    #loading {
+        text-align: center;
+        padding: 30px;
+        display: none;
+    }
+
+    .loading-spinner {
+        border: 4px solid rgba(255, 255, 255, 0.1);
+        border-top: 4px solid #00d2ff;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 15px;
+    }
+
+    /* Animations */
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes rotate {
+        from {
+            transform: rotate(0deg);
+        }
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes nodeGlow {
+        0% { opacity: 0.3; }
+        50% { opacity: 1; }
+        100% { opacity: 0.3; }
+    }
+
+    @keyframes lineGlow {
+        0% { opacity: 0.2; }
+        50% { opacity: 0.7; }
+        100% { opacity: 0.2; }
+    }
+
+    @keyframes float {
+        0% {
+            transform: translate(0, 0);
+        }
+        25% {
+            transform: translate(10px, 10px);
+        }
+        50% {
+            transform: translate(20px, 0px);
+        }
+        75% {
+            transform: translate(10px, -10px);
+        }
+        100% {
+            transform: translate(0, 0);
+        }
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+        .hero {
+            flex-direction: column;
+        }
+        
+        .hero-content, .ai-globe-container {
+            width: 100%;
+            text-align: center;
+        }
+        
+        .hero-text {
+            margin: 0 auto 30px;
+        }
+        
+        .ai-globe-container {
+            height: 400px;
+        }
+        
+        .ai-globe {
+            width: 250px;
+            height: 250px;
+        }
+        
+        .globe-inner {
+            width: 230px;
+            height: 230px;
+        }
+        
+        .logo-container {
+            top: 15px;
+            left: 20px;
+        }
+        
+        .logo-image {
+            height: 40px;
+            padding: 6px 12px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .logo-container {
+            top: 10px;
+            left: 15px;
+        }
+        
+        .logo-image {
+            height: 35px;
+            padding: 5px 10px;
+        }
+        
+        h1 {
+            font-size: 2.2em;
+        }
+        
+        .app-content {
+            padding: 30px 20px;
+        }
+        
+        .level-selection {
+            flex-direction: column;
+        }
+        
+        .level-btn {
+            width: 100%;
+        }
+        
+        .controls {
+            flex-direction: column;
+        }
+    }
+    #dev{
+        color:yellow;
+        
+    }
+</style>
+</head>
+<body>
+    
+    <!-- Logo in top left corner -->
+    <div class="logo-container">
+        <img src="static/images/logo.png" alt="English Buddy.AI Logo" class="logo-image">
+    </div>
+
+    <!-- Background Circuit Pattern -->
+    <div class="circuit-pattern"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero">
+            <div class="hero-content">
+                <h1>ENGLISH BUDDY.AI<span>ENGLISH CONVERSATION PRACTICE</span></h1>
+                <p class="hero-text">Improve your English speaking skills with our AI-powered conversation partner. Practice daily and grow in your career with personalized feedback.</p>
+                <button class="cta-button">GET STARTED</button>
+                
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+                <p id="dev">Developed By: Sam Kankrale</p>
+            </div>
+            
+            <div class="ai-globe-container">
+                <div class="ai-globe">
+                    <div class="globe-inner"></div>
+                    <div class="globe-detail"></div>
+                    <!-- Nodes and connections will be added by JavaScript -->
+                </div>
+                <!-- Floating particles will be added by JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Main App Content -->
+        <div class="app-content">
+            <div class="app-header">
+                <h2>English Buddy.AI</h2>
+                <p>Your AI English Conversation Partner. Practice daily to improve your skills and advance your career.</p>
+            </div>
+            
+            <!-- Level Selection -->
+            <div id="levelSelection" class="level-selection">
+                <button class="level-btn" data-level="Beginner">Beginner</button>
+                <button class="level-btn" data-level="Intermediate">Intermediate</button>
+                <button class="level-btn" data-level="Advanced">Advanced</button>
+            </div>
+            
+            <!-- Loading Indicator -->
+            <div id="loading">
+                <div class="loading-spinner"></div>
+                <div>Processing...</div>
+            </div>
+            
+            <!-- Chat Interface -->
+            <div id="chatContainer" class="chat-container"></div>
+            
+            <!-- Controls -->
+            <div id="controls" class="controls">
+                <button id="recordBtn" class="record-btn">
+                    <i class="fas fa-microphone"></i> Press to Speak
+                </button>
+                <button id="endBtn" class="end-btn">End Conversation</button>
+            </div>
+            
+            <div id="status" class="status"></div>
+            
+            <!-- Evaluation Report -->
+            <div id="reportContainer" class="report-container">
+                <h2>Your English Speaking Evaluation</h2>
+                <div id="reportContent">
+                    <!-- Report will be dynamically inserted here -->
+                </div>
+                <button id="restartBtn" class="restart-btn">Start New Conversation</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JavaScript for AI Globe Animation -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const aiGlobe = document.querySelector('.ai-globe');
+            const globeContainer = document.querySelector('.ai-globe-container');
+            
+            // Create nodes
+            for (let i = 0; i < 15; i++) {
+                const node = document.createElement('div');
+                node.className = 'node';
+                node.style.left = `${Math.random() * 80 + 10}%`;
+                node.style.top = `${Math.random() * 80 + 10}%`;
+                node.style.animationDelay = `${Math.random() * 3}s`;
+                aiGlobe.appendChild(node);
+            }
+            
+            // Create circuit lines
+            for (let i = 0; i < 12; i++) {
+                const line = document.createElement('div');
+                line.className = 'circuit-line';
+                line.style.left = `${Math.random() * 70 + 15}%`;
+                line.style.top = `${Math.random() * 70 + 15}%`;
+                line.style.width = `${Math.random() * 50 + 30}px`;
+                line.style.transform = `rotate(${Math.random() * 360}deg)`;
+                line.style.animationDelay = `${Math.random() * 2}s`;
+                aiGlobe.appendChild(line);
+            }
+            
+            // Create floating particles
+            for (let i = 0; i < 20; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'floating-particle';
+                particle.style.left = `${Math.random() * 90 + 5}%`;
+                particle.style.top = `${Math.random() * 90 + 5}%`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                globeContainer.appendChild(particle);
+            }
+
+            // Connect the CTA button to the app section
+            const ctaButton = document.querySelector('.cta-button');
+            const appContent = document.querySelector('.app-content');
+            
+            ctaButton.addEventListener('click', function() {
+                appContent.scrollIntoView({ behavior: 'smooth' });
+            });
+            
+            // Original functionality for level buttons
+            const levelButtons = document.querySelectorAll('.level-btn');
+            const chatContainer = document.getElementById('chatContainer');
+            const controls = document.getElementById('controls');
+            const loading = document.getElementById('loading');
+            const status = document.getElementById('status');
+            
+            levelButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const level = this.getAttribute('data-level');
+                    
+                    // Show loading
+                    loading.style.display = 'block';
+                    status.textContent = `Starting ${level} level conversation...`;
+                    
+                    // Simulate loading (replace with actual API call)
+                    setTimeout(() => {
+                        loading.style.display = 'none';
+                        chatContainer.style.display = 'block';
+                        controls.style.display = 'flex';
+                        status.textContent = 'Ready to talk. Press the button to speak.';
+                        
+                    }, 2000);
+                });
+            });
+            
+            // Record button functionality
+            const recordBtn = document.getElementById('recordBtn');
+            const endBtn = document.getElementById('endBtn');
+            const reportContainer = document.getElementById('reportContainer');
+            
+            recordBtn.addEventListener('click', function() {
+                if (this.classList.contains('recording')) {
+                    this.classList.remove('recording');
+                    this.innerHTML = '<i class="fas fa-microphone"></i> Press to Speak';
+                    status.textContent = 'Processing your speech...';
+                    
+                    // Simulate speech processing
+                    setTimeout(() => {
+                        // Add user message
+                        const userMessage = document.createElement('div');
+                        userMessage.className = 'message user-message';
+                        userMessage.textContent = 'This is a simulated user response for demonstration purposes.';
+                        chatContainer.appendChild(userMessage);
+                        
+                        // Simulate AI thinking
+                        status.textContent = 'AI is responding...';
+                        
+                        setTimeout(() => {
+                            // Add bot response
+                            const botResponse = document.createElement('div');
+                            botResponse.className = 'message bot-message';
+                            botResponse.textContent = 'Great! I noticed you used good vocabulary there. Would you like to discuss this topic more deeply? Perhaps we could talk about your experiences.';
+                            chatContainer.appendChild(botResponse);
+                            
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                            status.textContent = 'Ready to talk. Press the button to speak.';
+                        }, 1500);
+                    }, 1000);
+                    
+                } else {
+                    this.classList.add('recording');
+                    this.innerHTML = '<i class="fas fa-stop"></i> Recording...';
+                    status.textContent = 'Listening to your speech...';
+                }
+            });
+            
+            endBtn.addEventListener('click', function() {
+                chatContainer.style.display = 'none';
+                controls.style.display = 'none';
+                reportContainer.style.display = 'block';
+                
+                // Simulate report generation
+                const reportContent = document.getElementById('reportContent');
+                reportContent.innerHTML = `
+                    <div class="metric">
+                        <span class="metric-name">Fluency</span>
+                        <span class="metric-value">75%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">Pronunciation</span>
+                        <span class="metric-value">82%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">Vocabulary Usage</span>
+                        <span class="metric-value">68%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-name">Grammar Accuracy</span>
+                        <span class="metric-value">79%</span>
+                    </div>
+                    <div class="suggestions">
+                        <h3>Improvement Suggestions</h3>
+                        <p>Your conversation skills are developing well! Here are some areas to focus on:</p>
+                        <ul>
+                            <li>Try using more connecting phrases to make your speech flow better.</li>
+                            <li>Practice the pronunciation of 'th' sounds which were occasionally unclear.</li>
+                            <li>Work on expanding your vocabulary for describing experiences.</li>
+                        </ul>
+                    </div>
+                `;
+            });
+            
+            // Restart button functionality
+            const restartBtn = document.getElementById('restartBtn');
+            
+            restartBtn.addEventListener('click', function() {
+                reportContainer.style.display = 'none';
+                document.getElementById('levelSelection').scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+    
+    <!-- Include original JavaScript files -->
+    <script src="/static/js/recorder.js"></script>
+    <script src="/static/js/report.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
