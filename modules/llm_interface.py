@@ -6,7 +6,7 @@ import time
 # os.environ["GROQ_API_KEY"] = "your-api-key-here"
 
 # Initialize Groq client
-client = groq.Client(api_key="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")
+client = groq.Client(api_key="YOUR API KEY")
 
 def get_llm_response(system_prompt, conversation_history):
     """
